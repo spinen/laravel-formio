@@ -38,7 +38,7 @@ The primary class is `Spinen\Formio\Client`.  It gets constructed with 3 paramet
 
 Once you new up a `Client` instance, you have the following methods...
 
-* `addUser(FormioUser $user, $password = null)` - Add the user to the `user` resource in Formio.  If no password is provided, then if a default password is specified in the config, it is used. Otherwise, generate a random 32 character string.  Once the user is added to Formio, then the password is set on the `formio_password` property of the `$user` object, and the `save` method is called on it to persist the password for future interactions with Formio for the user. Finally, set the user's jwt on the `$token`, so that requests are made via the user.
+* `addUser(FormioUser $user, $password = null)` - Add the user to the `user` resource in Formio.  If no password is provided, then if a default password is specified in the config, it is used. Otherwise, generate a random 32 character string.  Once the user is added to Formio, then the password is set on the `formio_password` property of the `$user` object, and the `save` method is called on it to persist the password for future interactions with Formio for the user. Finally, set the user's JWT on the `$token`, so that requests are made via the user.
 
 * `login(FormioUser $user = null)` - If a `$user` is provided, then log the user into Formio with the array provided by the `getLoginData` method on the `$user` object.  Otherwise, log in the admin user from the config.
 
@@ -130,7 +130,7 @@ axios.get('/api/formio/jwt')
     });
 ```
 
-to get a paylod like this...
+to get a payload like this...
 
 ```json
 {
@@ -281,7 +281,7 @@ $ php artisan tinker
 
 ### Examples
 
-Here is an example of getting current user as admin:
+Here is an example of getting the current user as admin:
 
 ```php
 $ psysh
