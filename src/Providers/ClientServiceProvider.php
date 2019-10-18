@@ -9,11 +9,12 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
-use Spinen\Formio\Client;
 use Spinen\Formio\Client as Formio;
 
 /**
  * Class ClientServiceProvider
+ *
+ * Since this is deferred, it only needed to deal with code that has to do with the client.
  *
  * @package Spinen\Formio\Providers
  */
