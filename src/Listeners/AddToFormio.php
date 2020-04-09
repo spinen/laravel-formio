@@ -3,13 +3,18 @@
 namespace Spinen\Formio\Listeners;
 
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Config;
 use Spinen\Formio\Client as Formio;
 use Spinen\Formio\Exceptions\UserException;
 
 class AddToFormio implements ShouldQueue
 {
+    /**
+     * @var Config
+     */
+    protected $config;
+
     /**
      * Formio client instance
      *
@@ -20,10 +25,12 @@ class AddToFormio implements ShouldQueue
     /**
      * Create the event listener.
      *
+     * @param Config $config
      * @param Formio $formio
      */
-    public function __construct(Formio $formio)
+    public function __construct(Config $config, Formio $formio)
     {
+        $this->config = $config;
         $this->formio = $formio;
     }
 
@@ -37,7 +44,7 @@ class AddToFormio implements ShouldQueue
      */
     public function handle(Registered $event)
     {
-        if (Config::get('formio.user.sync')) {
+        if ($this->config->get('formio.user.sync')) {
             $this->formio->addUser($event->user);
         }
     }
@@ -51,6 +58,6 @@ class AddToFormio implements ShouldQueue
      */
     public function shouldQueue(Registered $event)
     {
-        return Config::get('formio.user.sync');
+        return $this->config->get('formio.user.sync');
     }
 }
