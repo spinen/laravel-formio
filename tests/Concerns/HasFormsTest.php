@@ -2,13 +2,21 @@
 
 namespace Spinen\Formio\Concerns;
 
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Encryption\Encrypter;
+use Mockery;
+use Mockery\Mock;
 use ReflectionClass;
 use Spinen\Formio\Concerns\Stubs\User;
 use Spinen\Formio\TestCase;
 
 class HasFormsTest extends TestCase
 {
+    /**
+     * @var Mock
+     */
+    protected $encrypter_mock;
+
     /**
      * @var User
      */
@@ -17,6 +25,11 @@ class HasFormsTest extends TestCase
     protected function setUp(): void
     {
         $this->trait = new User();
+
+        $this->encrypter_mock = Mockery::mock(Encrypter::class);
+
+        Container::getInstance()
+                 ->instance(Encrypter::class, $this->encrypter_mock);
     }
 
     /**
@@ -46,10 +59,10 @@ class HasFormsTest extends TestCase
      */
     public function it_encrypts_formio_password()
     {
-        Crypt::shouldReceive('encrypt')
-             ->once()
-             ->withArgs(['password'])
-             ->andReturn('encrypted password');
+        $this->encrypter_mock->shouldReceive('encrypt')
+                             ->once()
+                             ->withArgs(['password'])
+                             ->andReturn('encrypted password');
 
         $this->trait->setFormioPasswordAttribute('password');
 
@@ -61,9 +74,9 @@ class HasFormsTest extends TestCase
      */
     public function it_does_not_encrypt_a_null_formio_password()
     {
-        Crypt::shouldReceive('encrypt')
-             ->never()
-             ->withAnyArgs();
+        $this->encrypter_mock->shouldReceive('encrypt')
+                             ->never()
+                             ->withAnyArgs();
 
         $this->trait->setFormioPasswordAttribute(null);
 
@@ -75,10 +88,10 @@ class HasFormsTest extends TestCase
      */
     public function it_dencrypts_formio_password()
     {
-        Crypt::shouldReceive('decrypt')
-             ->once()
-             ->withArgs(['encrypted password'])
-             ->andReturn('password');
+        $this->encrypter_mock->shouldReceive('decrypt')
+                             ->once()
+                             ->withArgs(['encrypted password'])
+                             ->andReturn('password');
 
         $this->trait->attributes['formio_password'] = 'encrypted password';
 
@@ -90,9 +103,9 @@ class HasFormsTest extends TestCase
      */
     public function it_does_not_dencrypt_a_null_formio_password()
     {
-        Crypt::shouldReceive('decrypt')
-             ->never()
-             ->withAnyArgs();
+        $this->encrypter_mock->shouldReceive('decrypt')
+                             ->never()
+                             ->withAnyArgs();
 
         $this->trait->attributes['formio_password'] = null;
 
