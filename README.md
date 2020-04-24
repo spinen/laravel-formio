@@ -14,7 +14,7 @@ We solely use [Laravel](https://www.laravel.com) for our applications, so this p
 | Branch | Status | Coverage | Code Quality |
 | ------ | :----: | :------: | :----------: |
 | Develop | [![Build Status](https://travis-ci.org/spinen/laravel-formio.svg?branch=develop)](https://travis-ci.org/spinen/laravel-formio) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=develop) |
-| Master | [![Build Status](https://travis-ci.org/spinen/laravel-formio.svg?branch=master)](https://travis-ci.org/spinen/laravel-formio) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=develop) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=master) |
+| Master | [![Build Status](https://travis-ci.org/spinen/laravel-formio.svg?branch=master)](https://travis-ci.org/spinen/laravel-formio) | [![Code Coverage](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=master) | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spinen/laravel-formio/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spinen/laravel-formio/?branch=master) |
 
 ## Installation
 
