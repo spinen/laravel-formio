@@ -22,22 +22,16 @@
         "php": ">=7.2",
         "ext-json": "*",
         "firebase/php-jwt": "^5.0",
-        "guzzlehttp/guzzle": "^6.3",
-        "illuminate/database": "~5.5|~6|~7|~8",
-        "illuminate/http": "~5.5|~6|~7|~8",
-        "illuminate/routing": "~5.5|~6|~7|~8",
+        "guzzlehttp/guzzle": "~6.3|~7",
+        "laravel/framework": "~5.5|~6|~7|~8",
         "nesbot/carbon": "~1.2|~2",
-        "vlucas/phpdotenv": "^3.6|^4.0"
+        "vlucas/phpdotenv": "^3.6|^4.0|^5.0"
     },
     "require-dev": {
-        "illuminate/auth": "~5.5|~6|~7",
         "mockery/mockery": "^1.3.1",
         "phpunit/phpunit": "^8.4|^9.0",
         "psy/psysh": "^0.10",
         "symfony/thanks": "^1.1"
-    },
-    "suggest": {
-        "illuminate/auth": "Required to sync registered users (~5.5|~6|~7)."
     },
     "autoload": {
         "psr-4": {
