@@ -15,8 +15,6 @@ use Spinen\Formio\Client as Formio;
  * Class ClientServiceProvider
  *
  * Since this is deferred, it only needed to deal with code that has to do with the client.
- *
- * @package Spinen\Formio\Providers
  */
 class ClientServiceProvider extends LaravelServiceProvider implements DeferrableProvider
 {
@@ -91,7 +89,7 @@ class ClientServiceProvider extends LaravelServiceProvider implements Deferrable
                 }
 
                 $roleIds = function () use ($formio) {
-                    $roles = (array)$formio->login()
+                    $roles = (array) $formio->login()
                                            ->request('role?title=Authenticated')[0]['_id'];
 
                     $formio->logout();

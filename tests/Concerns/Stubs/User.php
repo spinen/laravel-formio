@@ -9,6 +9,8 @@ class User
     use HasForms;
 
     public $attributes = [];
+
     public $fillable = [];
+
     public $hidden = [];
 }

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Mockery;
 use Mockery\Mock;
 use Psr\Http\Message\RequestInterface;
@@ -16,8 +17,6 @@ use Spinen\Formio\Exceptions\UserException;
 
 /**
  * Class ClientTest
- *
- * @package Spinen\Formio
  */
 class ClientTest extends TestCase
 {
@@ -60,7 +59,8 @@ class ClientTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configs = require(__DIR__ . '/../config/formio.php');
+        $this->configs = require __DIR__.'/../config/formio.php';
+        $this->configs['user']['form'] = Str::random();
 
         $this->guzzle_mock = Mockery::mock(Guzzle::class);
 
@@ -69,7 +69,7 @@ class ClientTest extends TestCase
         $this->token_mock = Mockery::mock(Token::class);
 
         $this->user = [
-            'email'    => 'someone@somewhere.com',
+            'email' => 'someone@somewhere.com',
             'password' => 'password',
         ];
 
@@ -117,7 +117,7 @@ class ClientTest extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  $this->configs['url'] . $this->configs['user']['register']['path'],
+                                  $this->configs['url'].$this->configs['user']['register']['path'],
                                   [
                                       'form_params' => [
                                           'data' => $this->user,
@@ -223,7 +223,7 @@ class ClientTest extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  $this->configs['url'] . $this->configs['user']['login']['path'],
+                                  $this->configs['url'].$this->configs['user']['login']['path'],
                                   [
                                       'form_params' => [
                                           'data' => [$this->user],
@@ -273,11 +273,11 @@ class ClientTest extends TestCase
                           ->once()
                           ->withArgs(
                               [
-                                  $this->configs['url'] . $this->configs['admin']['login']['path'],
+                                  $this->configs['url'].$this->configs['admin']['login']['path'],
                                   [
                                       'form_params' => [
                                           'data' => [
-                                              'email'    => $this->configs['admin']['username'],
+                                              'email' => $this->configs['admin']['username'],
                                               'password' => $this->configs['admin']['password'],
                                           ],
                                       ],
@@ -410,9 +410,9 @@ class ClientTest extends TestCase
                           ->withArgs(
                               [
                                   'GET',
-                                  $this->configs['url'] . '/some/uri',
+                                  $this->configs['url'].'/some/uri',
                                   [
-                                      'headers'     => [
+                                      'headers' => [
                                           'x-jwt-token' => 'jwt',
                                       ],
                                       'form_params' => [
@@ -447,9 +447,9 @@ class ClientTest extends TestCase
                           ->withArgs(
                               [
                                   'POST',
-                                  $this->configs['url'] . '/some/uri',
+                                  $this->configs['url'].'/some/uri',
                                   [
-                                      'headers'     => [
+                                      'headers' => [
                                           'x-jwt-token' => 'jwt',
                                       ],
                                       'form_params' => [

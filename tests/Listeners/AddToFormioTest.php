@@ -70,7 +70,7 @@ class AddToFormioTest extends TestCase
         $this->client_mock->shouldReceive('addUser')
                           ->once()
                           ->with($this->user_mock)
-                          ->andReturnNull();
+                          ->andReturnSelf();
 
         $this->listener->handle($this->registered_mock);
     }
