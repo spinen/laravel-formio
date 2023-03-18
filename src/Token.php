@@ -8,52 +8,38 @@ use stdClass;
 
 /**
  * Class Token
- *
- * @package Spinen\Formio
  */
 class Token
 {
     /**
      * Carbon instance of when token expires
-     *
-     * @var Carbon
      */
-    public $expires_at;
+    public ?Carbon $expires_at = null;
 
     /**
      * Carbon instance of when token issued
-     *
-     * @var Carbon
      */
-    public $issued_at;
+    public ?Carbon $issued_at = null;
 
     /**
      * The JWT
-     *
-     * @var string
      */
-    public $jwt;
+    public ?string $jwt = null;
 
     /**
      * Parsed JWT as an object
-     *
-     * @var stdClass
      */
-    public $jwt_obj;
+    public ?stdClass $jwt_obj = null;
 
     /**
      * Formio User
-     *
-     * @var array
      */
-    public $user;
+    public ?array $user = null;
 
     /**
      * Is the token expired?
-     *
-     * @return bool
      */
-    public function expired()
+    public function expired(): bool
     {
         return empty($this->expires_at)
             ? true
@@ -65,56 +51,50 @@ class Token
      * Build SSO JWT for a User
      *
      * @see https://help.form.io/integrations/sso/
-     *
-     * @param string $project
-     * @param string $form
-     * @param array $user
-     * @param array $roles
-     * @param string $secret
-     * @param string $algorithm
-     *
-     * @return Token
      */
-    public function makeJwt($project, $form, array $user, array $roles, $secret, $algorithm)
-    {
+    public function makeJwt(
+        ?string $project,
+        string $form,
+        array $user,
+        array $roles,
+        string $secret,
+        string $algorithm
+    ): Token {
         $now = Carbon::now();
 
         $jwt = [
             'external' => true,
-            'form'     => [
+            'form' => [
                 '_id' => $form,
             ],
-            'user'     => [
-                '_id'   => 'external',
-                'data'  => $user,
+            'user' => [
+                '_id' => 'external',
+                'data' => $user,
                 'roles' => $roles,
             ],
-            'iat'      => $now->timestamp,
+            'iat' => $now->timestamp,
             // TODO: Use the same timeout as the docker container
-            'exp'      => $now->addMinutes(240)->timestamp,
+            'exp' => $now->addMinutes(240)->timestamp,
         ];
 
         // NOTE: Appears to only be used by enterprise version where you can have multiple "projects"
-        if (!is_null($project)) {
+        if (! is_null($project)) {
             $jwt['project'] = [
                 '_id' => $project,
             ];
         }
 
-        return $this->setJwt(JWT::encode($jwt, $secret, $algorithm), $secret, $algorithm)
-                    ->setUser($user);
+        return $this->setJwt(
+            algorithm: $algorithm,
+            jwt: JWT::encode($jwt, $secret, $algorithm),
+            secret: $secret,
+        )->setUser($user);
     }
 
     /**
      * Set the JWT
-     *
-     * @param string $jwt
-     * @param string $secret
-     * @param string $algorithm
-     *
-     * @return $this
      */
-    public function setJwt($jwt, $secret, $algorithm)
+    public function setJwt(string $jwt, string $secret, string $algorithm): self
     {
         // 1 second buffer to time difference
         JWT::$leeway += 10;
@@ -130,12 +110,8 @@ class Token
 
     /**
      * Set the User
-     *
-     * @param array $user
-     *
-     * @return Token
      */
-    public function setUser(array $user)
+    public function setUser(array $user): self
     {
         $this->user = $user;
 
