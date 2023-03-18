@@ -9,18 +9,14 @@ use Illuminate\Support\Facades\Crypt;
 /**
  * Trait HasForms
  *
- * @package Spinen\Formio
- *
  * @property string $formio_password
  */
 trait HasForms
 {
     /**
      * Accessor for FormioPassword.
-     *
-     * @return string
      */
-    public function getFormioPasswordAttribute()
+    public function getFormioPasswordAttribute(): ?string
     {
         return is_null($this->attributes['formio_password'] ?? null)
             ? null
@@ -30,36 +26,32 @@ trait HasForms
 
     /**
      * Build the array to login to Formio
-     *
-     * @return array
      */
-    public function getLoginData()
+    public function getLoginData(): array
     {
         return [
-            'email'    => $this->email,
+            'email' => $this->email,
             'password' => $this->formio_password,
         ];
     }
 
     /**
      * Build the array to register a user to Formio
-     *
-     * @return array
      */
-    public function getRegistrationData()
+    public function getRegistrationData(): array
     {
         return [
-            'email'     => $this->email,
+            'email' => $this->email,
             'firstName' => $this->first_name,
-            'lastName'  => $this->last_name,
-            'password'  => $this->formio_password,
+            'lastName' => $this->last_name,
+            'password' => $this->formio_password,
         ];
     }
 
     /**
      * Make sure that the formio_password is fillable & protected
      */
-    public function initializeHasFormsTrait()
+    public function initializeHasFormsTrait(): void
     {
         $this->fillable[] = 'formio_password';
         $this->hidden[] = 'formio_password';
@@ -71,10 +63,8 @@ trait HasForms
      * We are staying away from the Crypt facade, so that we can support PHP 7.4 with Laravel 5.x
      *
      * TODO: Remove this when dropping support of Laravel 5.5
-     *
-     * @return Encrypter
      */
-    protected function resolveEncrypter()
+    protected function resolveEncrypter(): Encrypter
     {
         return Container::getInstance()
                         ->make(Encrypter::class);
@@ -82,10 +72,8 @@ trait HasForms
 
     /**
      * Mutator for FormioPassword.
-     *
-     * @param string $formio_password
      */
-    public function setFormioPasswordAttribute($formio_password)
+    public function setFormioPasswordAttribute(?string $formio_password): void
     {
         $this->attributes['formio_password'] = is_null($formio_password)
             ? null

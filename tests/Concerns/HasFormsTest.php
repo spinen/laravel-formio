@@ -122,7 +122,7 @@ class HasFormsTest extends TestCase
 
         $this->assertEquals(
             [
-                'email'    => 'someone@somewhere.com',
+                'email' => 'someone@somewhere.com',
                 'password' => 'password',
             ],
             $this->trait->getLoginData()
@@ -142,10 +142,10 @@ class HasFormsTest extends TestCase
 
         $this->assertEquals(
             [
-                'email'     => 'someone@somewhere.com',
+                'email' => 'someone@somewhere.com',
                 'firstName' => 'First',
-                'lastName'  => 'Last',
-                'password'  => 'password',
+                'lastName' => 'Last',
+                'password' => 'password',
             ],
             $this->trait->getRegistrationData()
         );

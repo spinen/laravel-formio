@@ -11,7 +11,7 @@ return [
     | the account to make API calls.
     |
     */
-    'admin'   => [
+    'admin' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ return [
         | Admin login.
         |
         */
-        'login'    => [
+        'login' => [
 
             /*
             |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ return [
     | Configure the JWT token
     |
     */
-    'jwt'     => [
+    'jwt' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ return [
         | Must match the Formio server
         |
         */
-        'secret'    => env('FORMIO_JWT_SECRET', '--- change me now ---'),
+        'secret' => env('FORMIO_JWT_SECRET', '--- change me now ---'),
 
     ],
 
@@ -115,19 +115,19 @@ return [
     | A route to show the Formio JWT
     |
     */
-    'route'   => [
+    'route' => [
 
         // Expose jwt route?
-        'enabled'    => true,
+        'enabled' => true,
 
         // Middleware to use on the route
         'middleware' => ['api', 'auth:api'],
 
         // Name of route
-        'name'       => 'api.formio.jwt',
+        'name' => 'api.formio.jwt',
 
         // URI to reach the jwt
-        'uri'        => '/api/formio/jwt',
+        'uri' => '/api/formio/jwt',
 
     ],
 
@@ -139,7 +139,7 @@ return [
     | The URL to the Formio server
     |
     */
-    'url'     => env('FORMIO_URL', 'http://localhost:3001'),
+    'url' => env('FORMIO_URL', 'http://localhost:3001'),
 
     /*
     |--------------------------------------------------------------------------
@@ -149,7 +149,7 @@ return [
     | Regular user configuration.
     |
     */
-    'user'    => [
+    'user' => [
 
         /*
         |--------------------------------------------------------------------------
@@ -161,7 +161,7 @@ return [
         | NOTE: For Laravel, if null, then we automatically get the "user" _id
         |
         */
-        'form'     => env('FORMIO_USER_FORM', null),
+        'form' => env('FORMIO_USER_FORM', null),
 
         /*
         |--------------------------------------------------------------------------
@@ -171,7 +171,7 @@ return [
         | Regular user login.
         |
         */
-        'login'    => [
+        'login' => [
 
             /*
             |--------------------------------------------------------------------------
@@ -216,7 +216,7 @@ return [
             | Path to the user registration
             |
             */
-            'path'             => '/user/register',
+            'path' => '/user/register',
 
         ],
 
@@ -240,7 +240,7 @@ return [
         | Should registered users be synced to Formio?
         |
         */
-        'sync'  => false,
+        'sync' => false,
 
     ],
 

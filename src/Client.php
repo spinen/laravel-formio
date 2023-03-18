@@ -15,56 +15,32 @@ use Spinen\Formio\Exceptions\UserException;
 
 /**
  * Class Client
- *
- * @package Spinen\Formio
  */
 class Client
 {
     /**
-     * Configs for the client
-     *
-     * @var array
+     * The Token instance
      */
-    protected $configs;
-
-    /**
-     * Guzzle instance
-     *
-     * @var Guzzle
-     */
-    protected $guzzle;
-
-    /**
-     * Token instance
-     *
-     * @var Token
-     */
-    public $token;
+    public ?Token $token = null;
 
     /**
      * Client constructor.
-     *
-     * @param array $configs
-     * @param Guzzle $guzzle
-     * @param Token|null $token
      */
-    public function __construct(array $configs, Guzzle $guzzle, Token $token = null)
-    {
+    public function __construct(
+        protected array $configs,
+        protected Guzzle $guzzle,
+        ?Token $token = null
+    ) {
         $this->setConfigs($configs);
-        $this->guzzle = $guzzle;
         $this->token = $token ?? new Token();
     }
 
     /**
      * Add a user to Formio
      *
-     * @param FormioUser $user
-     * @param null $password
-     *
-     * @return Client
      * @throws UserException
      */
-    public function addUser(FormioUser $user, $password = null)
+    public function addUser(FormioUser $user, ?string $password = null): self
     {
         $user->formio_password = $password ?? $this->configs['user']['register']['default_password'] ?? Str::random(32);
 
@@ -78,9 +54,8 @@ class Client
                 ]
             );
 
-            if (!$user->save()) {
+            if (! $user->save()) {
                 throw new UserException("Unable to save the user's Formio password");
-
                 // TODO: Rollback
             }
 
@@ -96,13 +71,11 @@ class Client
 
     /**
      * Build admin login
-     *
-     * @return array
      */
-    protected function getAdminLoginData()
+    protected function getAdminLoginData(): array
     {
         return [
-            'email'    => $this->configs['admin']['username'],
+            'email' => $this->configs['admin']['username'],
             'password' => $this->configs['admin']['password'],
         ];
     }
@@ -112,12 +85,9 @@ class Client
      *
      * If no user provided, then use the admin user
      *
-     * @param FormioUser|null $user
-     *
-     * @return Client
      * @throws Exception
      */
-    public function login(FormioUser $user = null)
+    public function login(FormioUser $user = null): Client
     {
         try {
             $this->parseUser(
@@ -145,10 +115,8 @@ class Client
      * Logout
      *
      * Since the Formio is stateless, just empty the Token
-     *
-     * @return $this
      */
-    public function logout()
+    public function logout(): self
     {
         $this->token = new Token();
 
@@ -157,39 +125,32 @@ class Client
 
     /**
      * Parse the user & JWT from the response into the token
-     *
-     * @param ResponseInterface $response
      */
-    protected function parseUser(ResponseInterface $response)
+    protected function parseUser(ResponseInterface $response): void
     {
         // TODO: Add some error checking to user parsing
         $this->token = $this->token->setUser(json_decode($response->getBody(), true))
-                                   ->setJwt(
-                                       $response->getHeader('x-jwt-token')[0],
-                                       $this->configs['jwt']['secret'],
-                                       $this->configs['jwt']['algorithm']
-                                   );
+            ->setJwt(
+                algorithm: $this->configs['jwt']['algorithm'],
+                jwt: $response->getHeader('x-jwt-token')[0],
+                secret: $this->configs['jwt']['secret'],
+            );
     }
 
     /**
      * Make an API call to Formio
      *
-     * @param $path
-     * @param array|null $data
-     * @param string|null $method
-     *
-     * @return array
      * @throws GuzzleException
      * @throws TokenException
      */
-    public function request($path, $data = [], $method = 'GET')
+    public function request(string $path, ?array $data = [], ?string $method = 'GET'): array
     {
-        if (!$this->token) {
+        if (! $this->token) {
             throw new TokenException('Must be logged in before making a request');
         }
 
         if ($this->token->expired()) {
-            throw new TokenException('Token expired ' . $this->token->expires_at->diffForHumans());
+            throw new TokenException('Token expired '.$this->token->expires_at->diffForHumans());
         }
 
         try {
@@ -197,7 +158,7 @@ class Client
                 $method,
                 $this->uri($path),
                 [
-                    'headers'     => [
+                    'headers' => [
                         'x-jwt-token' => $this->token->jwt,
                     ],
                     'form_params' => [
@@ -216,12 +177,8 @@ class Client
 
     /**
      * Set the configs
-     *
-     * @param array $configs
-     *
-     * @return $this
      */
-    public function setConfigs(array $configs)
+    public function setConfigs(array $configs): self
     {
         $this->configs = $configs;
 
@@ -234,12 +191,9 @@ class Client
      * If the user already has a Formio password, then login the use.
      * Otherwise, make a Custom JWT.
      *
-     * @param FormioUser $user
-     *
-     * @return Client
      * @throws Exception
      */
-    public function sso(FormioUser $user)
+    public function sso(FormioUser $user): Client
     {
         // If the user has a Formio password, then log them in
         if ($user->formio_password) {
@@ -247,13 +201,13 @@ class Client
         }
 
         $this->token = $this->token->makeJwt(
-            $this->configs['project']['id'],
-            $this->configs['user']['form'],
-            Arr::except($user->getRegistrationData(), 'password'),
+            algorithm: $this->configs['jwt']['algorithm'],
+            form: $this->configs['user']['form'],
+            project: $this->configs['project']['id'] ?? null,
             // TODO: Roles from the database?
-            $this->configs['user']['roles'],
-            $this->configs['jwt']['secret'],
-            $this->configs['jwt']['algorithm']
+            roles: $this->configs['user']['roles'],
+            secret: $this->configs['jwt']['secret'],
+            user: Arr::except($user->getRegistrationData(), 'password'),
         );
 
         return $this;
@@ -263,13 +217,9 @@ class Client
      * URL to Formio
      *
      * If path is passed in, then append it to the end
-     *
-     * @param null $path
-     *
-     * @return string
      */
-    public function uri($path = null)
+    public function uri(?string $path = null): string
     {
-        return rtrim($this->configs['url'], '/') . '/' . ltrim($path, '/');
+        return rtrim($this->configs['url'], '/').'/'.ltrim($path, '/');
     }
 }

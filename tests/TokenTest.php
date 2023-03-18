@@ -8,8 +8,6 @@ use stdClass;
 
 /**
  * Class TokenTest
- *
- * @package Spinen\Formio
  */
 class TokenTest extends TestCase
 {
@@ -25,7 +23,7 @@ class TokenTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configs = require(__DIR__ . '/../config/formio.php');
+        $this->configs = require __DIR__.'/../config/formio.php';
 
         $this->token = new Token();
     }
@@ -43,10 +41,10 @@ class TokenTest extends TestCase
      */
     public function it_sets_the_user()
     {
-        $this->assertNull($this->token->user, 'Baseline');
+        $this->assertEmpty($this->token->user, 'Baseline');
 
         $user = [
-            'name'  => 'Name',
+            'name' => 'Name',
             'email' => 'user@place.com',
         ];
 
@@ -68,11 +66,11 @@ class TokenTest extends TestCase
 
         $jwt_payload = [
             'user' => [
-                'name'  => 'Name',
+                'name' => 'Name',
                 'email' => 'user@place.com',
             ],
-            'iat'  => Carbon::now()->timestamp,
-            'exp'  => Carbon::now()
+            'iat' => Carbon::now()->timestamp,
+            'exp' => Carbon::now()
                             ->addMinutes(240)->timestamp,
         ];
 
@@ -100,7 +98,7 @@ class TokenTest extends TestCase
         $this->assertTrue($this->token->expired(), 'Baseline expired');
 
         $user = [
-            'name'  => 'Name',
+            'name' => 'Name',
             'email' => 'user@place.com',
         ];
 
@@ -154,7 +152,7 @@ class TokenTest extends TestCase
     public function it_makes_a_custom_jwt_with_a_project()
     {
         $user = [
-            'name'  => 'Name',
+            'name' => 'Name',
             'email' => 'user@place.com',
         ];
 
