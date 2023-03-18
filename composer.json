@@ -23,6 +23,7 @@
         "firebase/php-jwt": "^5.0",
         "guzzlehttp/guzzle": "^7.4.5",
         "laravel/framework": "^8|^9|^10",
+        "laravel/pint": "^1.6",
         "nesbot/carbon": "^2.62.1",
         "vlucas/phpdotenv": "^5.0"
     },
