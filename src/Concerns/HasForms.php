@@ -2,8 +2,6 @@
 
 namespace Spinen\Formio\Concerns;
 
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Support\Facades\Crypt;
 
 /**
@@ -20,8 +18,7 @@ trait HasForms
     {
         return is_null($this->attributes['formio_password'] ?? null)
             ? null
-            : $this->resolveEncrypter()
-                   ->decrypt($this->attributes['formio_password']);
+            : Crypt::decryptString($this->attributes['formio_password']);
     }
 
     /**
@@ -58,26 +55,12 @@ trait HasForms
     }
 
     /**
-     * Resolve the encrypter from the IoC
-     *
-     * We are staying away from the Crypt facade, so that we can support PHP 7.4 with Laravel 5.x
-     *
-     * TODO: Remove this when dropping support of Laravel 5.5
-     */
-    protected function resolveEncrypter(): Encrypter
-    {
-        return Container::getInstance()
-                        ->make(Encrypter::class);
-    }
-
-    /**
      * Mutator for FormioPassword.
      */
     public function setFormioPasswordAttribute(?string $formio_password): void
     {
         $this->attributes['formio_password'] = is_null($formio_password)
             ? null
-            : $this->resolveEncrypter()
-                   ->encrypt($formio_password);
+            : Crypt::encryptString($formio_password);
     }
 }

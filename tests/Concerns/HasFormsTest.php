@@ -4,6 +4,7 @@ namespace Spinen\Formio\Concerns;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Support\Facades\Crypt;
 use Mockery;
 use Mockery\Mock;
 use ReflectionClass;
@@ -59,7 +60,7 @@ class HasFormsTest extends TestCase
      */
     public function it_encrypts_formio_password()
     {
-        $this->encrypter_mock->shouldReceive('encrypt')
+        Crypt::shouldReceive('encryptString')
                              ->once()
                              ->withArgs(['password'])
                              ->andReturn('encrypted password');
@@ -74,7 +75,7 @@ class HasFormsTest extends TestCase
      */
     public function it_does_not_encrypt_a_null_formio_password()
     {
-        $this->encrypter_mock->shouldReceive('encrypt')
+        Crypt::shouldReceive('encryptString')
                              ->never()
                              ->withAnyArgs();
 
@@ -88,7 +89,7 @@ class HasFormsTest extends TestCase
      */
     public function it_dencrypts_formio_password()
     {
-        $this->encrypter_mock->shouldReceive('decrypt')
+        Crypt::shouldReceive('decryptString')
                              ->once()
                              ->withArgs(['encrypted password'])
                              ->andReturn('password');
@@ -103,7 +104,7 @@ class HasFormsTest extends TestCase
      */
     public function it_does_not_dencrypt_a_null_formio_password()
     {
-        $this->encrypter_mock->shouldReceive('decrypt')
+        Crypt::shouldReceive('decryptString')
                              ->never()
                              ->withAnyArgs();
 

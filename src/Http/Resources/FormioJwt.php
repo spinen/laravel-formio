@@ -2,19 +2,7 @@
 
 namespace Spinen\Formio\Http\Resources;
 
-//use Illuminate\Http\Resources\Json\JsonResource;
-
-// TODO: When dropping support of Laravel 5.5, remove this if/else
-if (class_exists('Illuminate\Http\Resources\Json\JsonResource')) {
-    class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
-    {
-    }
-} else {
-    // NOTE: Only here to support Laravel 5.5
-    class JsonResource extends \Illuminate\Http\Resources\Json\Resource
-    {
-    }
-}
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class FormioJwt extends JsonResource
 {
